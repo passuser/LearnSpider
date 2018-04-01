@@ -5,7 +5,12 @@
 # Don't forget to add your pipeline to the ITEM_PIPELINES setting
 # See: http://doc.scrapy.org/en/latest/topics/item-pipeline.html
 
-
+import pymongo
 class BiqugespiderPipeline(object):
+    def __init__(self):
+        self.db = pymongo.MongoClient().novel
+
     def process_item(self, item, spider):
+        self.db.biqu.insert(dict(item))
+        print('writed')
         return item
