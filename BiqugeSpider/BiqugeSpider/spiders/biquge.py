@@ -11,18 +11,22 @@ class Biquge(scrapy.Spider):
     name = 'binovel'
     start_urls = ['http://www.biquge.com.tw/']
 
+    def __init__(self):
+        self.crawledurl = set()
+        self.rooturl = 'http://www.biquge.com.tw/'
+
     def parse(self,response):
-        rurl = 'http://www.biquge.com.tw/'
         novellist = response.xpath('/html//div[@id="main"]//a')
         for href in novellist:
             novelurl = href.xpath('./@href').extract()[0]
-            if 'html' in novelurl:
+            if 'html' in novelurl or novelurl in self.crawledurl:
                 pass
             else:
+                self.crawledurl.add(novelurl)
                 yield scrapy.Request(url=novelurl,callback=self.parse_novel)
         noveltypes = response.xpath('//div[@class="nav"]//li[position()>1]/a')
         for noveltype in noveltypes:
-            noveltype = urllib.parse.urljoin(rurl,noveltype.xpath('./@href').extract()[0])
+            noveltype = urllib.parse.urljoin(self.rooturl,noveltype.xpath('./@href').extract()[0])
             yield scrapy.Request(url=noveltype,callback=self.parse)
 
     def parse_novel(self,response):
@@ -32,7 +36,7 @@ class Biquge(scrapy.Spider):
         a = response.xpath('/html//div[@id="list"]//dd/a')
         for p in a:
             title = p.xpath('./text()').extract()[0]
-            link = p.xpath('./@href').extract()[0]
+            link = urllib.parse.urljoin(self.rooturl,p.xpath('./@href').extract()[0])
             chapter = {'章节':title,'链接':link}
             novelcontext.append(chapter)
         item = BiqugespiderItem(novelname=novelname,novelauthor=novelauthor,novelchapter=novelcontext)
