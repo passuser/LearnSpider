@@ -6,13 +6,14 @@
 #                                                                                                                                 
 ###############################################################################################################################################
 import scrapy,urllib
+from BiqugeSpider.items import BiqugespiderItem  
 class Biquge(scrapy.Spider):
     name = 'binovel'
     start_urls = ['http://www.biquge.com.tw/']
 
     def parse(self,response):
         rurl = 'http://www.biquge.com.tw/'
-        novellist = response.xpath('/html/body//div[@id="newscontent"]//a')
+        novellist = response.xpath('/html//div[@id="main"]//a')
         for href in novellist:
             novelurl = href.xpath('./@href').extract()[0]
             if 'html' in novelurl:
@@ -25,4 +26,14 @@ class Biquge(scrapy.Spider):
             yield scrapy.Request(url=noveltype,callback=self.parse)
 
     def parse_novel(self,response):
-        pass
+        novelname = response.xpath('/html//div[@id="info"]/h1/text()').extract()[0]
+        novelauthor = response.xpath('/html//div[@id="info"]/p[1]/text()').extract()[0].split('：')[-1]
+        novelcontext = []
+        a = response.xpath('/html//div[@id="list"]//dd/a')
+        for p in a:
+            title = p.xpath('./text()').extract()[0]
+            link = p.xpath('./@href').extract()[0]
+            chapter = {'章节':title,'链接':link}
+            novelcontext.append(chapter)
+        item = BiqugespiderItem(novelname=novelname,novelauthor=novelauthor,novelchapter=novelcontext)
+        yield item
