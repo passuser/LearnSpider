@@ -38,6 +38,6 @@ class Biquge(scrapy.Spider):
             title = p.xpath('./text()').extract()[0]
             link = urllib.parse.urljoin(self.rooturl,p.xpath('./@href').extract()[0])
             chapter = {'章节':title,'链接':link}
-            novelcontext.append(chapter)
+            novelcontext.append({'章节':title,'链接':link})
         item = BiqugespiderItem(novelname=novelname,novelauthor=novelauthor,novelchapter=novelcontext)
         yield item
