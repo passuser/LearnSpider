@@ -1,1 +1,1 @@
-# LearnScrapy
+# Learn Spider
