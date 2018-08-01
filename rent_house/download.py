@@ -15,9 +15,9 @@ class html_down(object):
         self.proixy={}
 
     def down(self,url):
-        respone=requests.Session().get(url,headers=self.headers)
-        if respone.status_code==200:
-            respone.encoding=chardet.detect(respone.content)['encoding']
+        response=requests.Session().get(url,headers=self.headers)
+        if responise.status_code==200:
+            responise.encoding=chardet.detect(respone.content)['encoding']
             return respone.text 
         else:
             pass 

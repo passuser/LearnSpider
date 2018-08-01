@@ -20,11 +20,11 @@ class parse(object):
     def Parse_html(self,html):
         house_soup=BeautifulSoup(html,'lxml')
         info=house_soup.find('ul',class_='f14')
-        rent=house_soup.b.string 
+        rent=int(house_soup.b.string) 
         rent_to_pay=house_soup.select('span.c_333')[0].string 
         rent_method=info.find_all('span',class_='')[0].string 
         house_type=str(info.find_all('span',class_='')[1].string).split()[0]
-        house_area=str(info.find_all('span',class_='')[1].string).split()[1]
+        house_area=int(str(info.find_all('span',class_='')[1].string).split()[1])
         towards=str(info.find_all('span',class_='')[2].string).split()[0]
         layout=str(info.find_all('span',class_='')[2].string).split()[1]
         town=info.find_all('span',class_="")[3].string 
@@ -34,7 +34,7 @@ class parse(object):
         agent=house_soup.find('a',class_='c_000').string
         rent_conditions=''
         for span in house_soup.find_all('span',class_='a2')[-1].select('span'):
-            rent_conditions=rent_conditions+str(span.string)
+            rent_conditions=rent_conditions+str(span.string).strip()
         if rent_conditions=='':
             rent_conditions=house_soup.h1.string
         house={
