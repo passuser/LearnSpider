@@ -8,9 +8,9 @@
 import pymongo
 class BiqugespiderPipeline(object):
     def __init__(self):
-        self.db = pymongo.MongoClient().novel
+        self.db = pymongo.MongoClient().spider 
 
     def process_item(self, item, spider):
-        self.db.biqu.insert(dict(item))
+        self.db.novel.insert(dict(item))
         print('writed')
         return item

@@ -14,11 +14,11 @@ class biquge(object):
         self.i = 0
 
     def html_response(self,url):
-        proxy = {
-            'http':'http://127.0.0.1:1159',
-            'https':'http://127.0.0.1:1159'
-            }
-        r = requests.get(url,proxies=proxy)
+   #     proxy = {
+   #         'http':'http://127.0.0.1:1159',
+   #         'https':'http://127.0.0.1:1159'
+   #         }
+        r = requests.get(url)
         r.encoding=chardet.detect(r.content)['encoding']
         if r.status_code == 200:
             return r.text,url 
