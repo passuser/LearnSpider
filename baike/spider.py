@@ -16,28 +16,23 @@ class spiderman(object):
         self.parse = htparse()
 
     def crawl(self,url):
-        self.manage.new_urls_add(url)
+        self.manage.new_urls.add(url)
         self.sd.write_head(self.sd.filepath)
-        while (self.manage.has_new_url() and self.manage.old_urls_size()<3000):
+        while (self.manage.has_new_url() and self.manage.old_urls_size()<20):
             try:
                 new_url = self.manage.get_new_url()
-                print(new_url)
                 html = self.dl.download(new_url)
-                print(html)
                 new_urls,date = self.parse.par(new_url,html)
-                print(new_urls,date)
-                for new_url in new_urls:
-                    self.manage.new_urls_add(new_url)
-                    self.sd.Sd(date)
-                    print("已经抓取了%s个链接"%self.manage.old_urls_size())
-                    self.sd.write_html(self.sd.filepath)
+                self.manage.new_urls_add(new_urls)
+                self.sd.Sd(date)
+                self.sd.write_html(self.sd.filepath)
+                print('抓取%s个链接'%self.manage.old_urls_size())
             except Exception as e:
                 print("........................................失败原因:%s"%e)
-                self.manage.save_progress('new_urls.txt',self.manage.new_urls())
-                self.manage.load_progress('old_urls.txt',self.manage.old_urls())
         self.sd.write_end(self.sd.filepath)
         print(self.manage.new_urls_size())
-
+        self.manage.save_progress('new_urls.txt',self.manage.new_urls)
+        self.manage.save_progress('old_news.txt',self.manage.old_urls)
 if __name__ == '__main__':
     sman = spiderman()
     sman.crawl("https://baike.baidu.com/item/NO%20GAME%20NO%20LIFE%20%E6%B8%B8%E6%88%8F%E4%BA%BA%E7%94%9F/3490145?fromtitle=no%20game%20no%20life&fromid=18528516")

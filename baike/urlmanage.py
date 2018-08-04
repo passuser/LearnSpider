@@ -15,14 +15,15 @@ class urlmanage(object):
         self.old_urls.add(m.hexdigest()[8:-8])
         return new_url
 
-    def new_url_add(self,url):
-        if url is None:
+    def new_urls_add(self,urls):
+        if urls is None:
             return None
-        m=hashlib.md5()
-        m.update(url.encode('utf-8'))
-        url_md5=m.hexdigest()[8:-8]
-        if url not in self.new_urls and url_md5 not in self.old_urls:
-            self.new_urls.add(url)
+        for url in urls:
+            m=hashlib.md5()
+            m.update(url.encode('utf-8'))
+            url_md5=m.hexdigest()[8:-8]
+            if url not in self.new_urls and url_md5 not in self.old_urls:
+                self.new_urls.add(url)
 
     def new_urls_size(self):
         return len(self.new_urls)
@@ -31,7 +32,7 @@ class urlmanage(object):
         return len(self.old_urls)
 
     def save_progress(self,path,date):
-        with open(path,'wab') as f:
+        with open(path,'wb') as f:
             pickle.dump(date,f)
 
     def load_progress(self,path):
@@ -42,7 +43,6 @@ class urlmanage(object):
                 return tmp
         except:
             with open(path,'w') as f:
-                pass
-            print('[!] 无进度文件，创建文件：%s'%path)
-        return set()
+                print('[!] 无进度文件，创建文件：%s'%path)
+                return set()
 

@@ -6,7 +6,6 @@
 #################################################
 import queue,time
 from urlmanage import *
-from storedate import *
 from htmldownload import Download
 from parse import htparse
 from multiprocessing.managers import BaseManager
@@ -19,13 +18,13 @@ from multiprocessing import Process
 '''
 class spider_work(object):
     def __init__(self):
-        BaseManager.register('get_url_queue')
+        BaseManager.register('get_task_queue')
         BaseManager.register('get_result_queue')
         server_addr='127.0.0.1'
         print('Connecting to server %s...'%server_addr)
-        self.m=BaseManager(address=(server_addr,5000),authkey='baidubaike'.encode('utf-8'))
+        self.m=BaseManager(address=(server_addr,8050),authkey=b'baidubaike')
         self.m.connect()
-        self.url=self.m.get_url_queue()
+        self.url_down=self.m.get_task_queue()
         self.result=self.m.get_result_queue()
         self.dl=Download()
         self.pr=htparse()
@@ -34,11 +33,9 @@ class spider_work(object):
     def crawl(self):
         while True:
             try:
-                print('节点开始工作',not self.url.empty())
-                if not  self.url.empty():
-                    print('123456')
-                    url=self.url.get()
-                    print(url)
+                if not self.url_down.empty():
+                    print('节点开始工作...')
+                    url=self.url_down.get()
                     if url == 'stop':
                         print('节点正在停止工作...')
                         self.result.put({'new_urls':'stop','data':'stop'})
