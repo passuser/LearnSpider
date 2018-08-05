@@ -11,6 +11,6 @@ class BiqugespiderPipeline(object):
         self.db = pymongo.MongoClient().spider 
 
     def process_item(self, item, spider):
-        self.db.novel.insert(dict(item))
+        self.db.novels.insert(dict(item))
         print('writed')
         return item
