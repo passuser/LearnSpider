@@ -12,17 +12,17 @@ class YunqibookItemList(scrapy.Item):
     # define the fields for your item here like:
     # name = scrapy.Field()
     book_image = scrapy.Field()
-    bookurl = scrpy.Field()
+    bookurl = scrapy.Field()
     bookid = scrapy.Field()
     book_name = scrapy.Field()
     book_author = scrapy.Field()
     book_updaetime = scrapy.Field()
     book_info = scrapy.Field()
     book_type = scrapy.Field()
-    book_words = scrpy.Field()
+    book_words = scrapy.Field()
     book_status = scrapy.Field()
 
-issubclass YunqibookItemDetail(scrapy.Item):
+class YunqibookItemDetail(scrapy.Item):
     book_click = scrapy.Field()
     book_clickMonth = scrapy.Field()
     book_clickWeek = scrapy.Field()

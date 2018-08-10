@@ -96,7 +96,7 @@ DEFAULT_REQUEST_HEADERS = {
 # See https://doc.scrapy.org/en/latest/topics/downloader-middleware.html
 DOWNLOADER_MIDDLEWARES = {
     'yunqibook.middlewares.RandomUserAgent.RandomUserAgent': 410,
-    'scapy.downloadermiddlewares.useragent.UserAgentMiddleware': None,
+    'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware':None,
 }
 
 # Enable or disable extensions
@@ -134,3 +134,9 @@ AUTOTHROTTLE_MAX_DELAY = 60
 #HTTPCACHE_DIR = 'httpcache'
 #HTTPCACHE_IGNORE_HTTP_CODES = []
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
+SCHEDULER = 'yunqibook.scrapy_redis.scheduler.Scheduler'
+SCHEDULER_PERSIST = True 
+DUPEFILTER_CLASS = "yunqibook.scrapy_redis.dupefilter.RFPDupeFilter"
+REDIS_HOST = '127.0.0.1'
+REDIS_PORT = '6379'
+

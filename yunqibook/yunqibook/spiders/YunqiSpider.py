@@ -11,13 +11,17 @@
 import scrapy 
 from scrapy.spiders import CrawlSpider, Rule
 from scrapy.linkextractors import LinkExtractor
-class Yunqi(CrawlSpider):
-    name = 'yunqispider'
-    allowed = ['Yunqi.qq.com']
-    start_urls = ['http://yunqi.qq.com/bk/so2/n30']
+from scrapy.http import Request
+from yunqibook.items import YunqibookItemList,YunqibookItemDetail 
+
+class YunqiSpider(CrawlSpider):
+    
+    name = 'yunqi.qq.com'
+    allowed_domains = ['yunqi.qq.com']
+    start_urls = ['http://yunqi.qq.com/bk/so2/n30p1']
     rules = (
-        Rule(LinkExtractor(allow=r'/bk/so2/n30/p\d+'),callback='parse_book_list',follow=True),
-            )
+        Rule(LinkExtractor(allow=r'/bk/so2/n30p\d+'), callback='parse_book_list', follow=True),
+    )
 
     def parse_book_list(self,response):
         books = response.xpath(".//div[@class='book']")
@@ -41,11 +45,15 @@ class Yunqi(CrawlSpider):
                 book_type =  ''
                 book_words = 0
                 book_status = ''
-            List_items = YunqibookItemList(book_image=book_image,book_name=book_name,book_url=bookurl,
-            book_author=book_author,book_updaetime=book_updaetime,book_info=book_info,book_type=book_info,
-            book_words=book_words,book_status=book_status)
+            List_items = YunqibookItemList(
+                book_image=book_image,book_name=book_name,bookurl=bookurl,
+                book_author=book_author,book_updaetime=book_updaetime,book_info=book_info,book_type=book_info,
+                book_words=book_words,book_status=book_status)
             yield List_items 
+            from scrapy.shell import inspect_response 
+            inspect_response(response)
             request = scrapy.Request(url=bookurl,callback=self.parse_book_detail)
+            request.meta['bookid'] = bookid 
             yield request
 
     def parse_book_detail(self,response):
@@ -61,8 +69,9 @@ class Yunqi(CrawlSpider):
             book_recomm =bookdetail[1].xpath("./td/text()").extract()[2]
             book_recommMonth =bookdetail[2].xpath("./td/text()").extract()[2]
             book_recommWeek =bookdetail[3].xpath("./td/text()").extract()[2]
-        Detailitems = YunqibookItemDetail(book_click=book_click,book_clickMonth=book_clickMonth,book_clickWeek=book_clickWeek,
-         book_people=book_people,book_peopleWeek=book_peopleWeek,book_peopleMonth=book_peopleMonth,book_recomm=book_recomm,
-         book_recommWeek=book_recommWeek,book_recommMonth=book_recommMonth,book_comment=book_comment)
+        Detailitems = YunqibookItemDetail(
+            book_click=book_click,book_clickMonth=book_clickMonth,book_clickWeek=book_clickWeek,
+            book_people=book_people,book_peopleWeek=book_peopleWeek,book_peopleMonth=book_peopleMonth,book_recomm=book_recomm,
+            book_recommWeek=book_recommWeek,book_recommMonth=book_recommMonth,book_comment=book_comment)
         yield Detailitems 
 
