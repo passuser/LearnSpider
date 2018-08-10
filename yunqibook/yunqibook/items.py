@@ -23,6 +23,7 @@ class YunqibookItemList(scrapy.Item):
     book_status = scrapy.Field()
 
 class YunqibookItemDetail(scrapy.Item):
+    bookid = scrapy.Field()
     book_click = scrapy.Field()
     book_clickMonth = scrapy.Field()
     book_clickWeek = scrapy.Field()

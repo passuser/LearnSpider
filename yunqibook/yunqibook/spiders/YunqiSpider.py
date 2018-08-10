@@ -14,7 +14,7 @@ from scrapy.linkextractors import LinkExtractor
 from scrapy.http import Request
 from yunqibook.items import YunqibookItemList,YunqibookItemDetail 
 
-class Yunqi(CrawlSpider):
+class YunqiSpider(CrawlSpider):
     
     name = 'yunqi.qq.com'
     allowed_domains = ['yunqi.qq.com']
@@ -63,11 +63,11 @@ class Yunqi(CrawlSpider):
             book_people = bookdetail[1].xpath("./td/text()").extract()[1]
             book_peopleMonth = bookdetail[2].xpath("./td/text()").extract()[1]
             book_peopleWeek = bookdetail[3].xpath("./td/text()").extract()[1]
-            book_comment = bookdetail[4].xpath("./td/span/text()").extract_first()
+            book_comment = int(bookdetail[4].xpath("./td/span/text()").extract_first())
             book_recomm = bookdetail[1].xpath("./td/text()").extract()[2]
             book_recommMonth = bookdetail[2].xpath("./td/text()").extract()[2]
             book_recommWeek = bookdetail[3].xpath("./td/text()").extract()[2]
-        Detailitems = YunqibookItemDetail(
+        Detailitems = YunqibookItemDetail(bookid=response.meta['bookid'],
             book_click=book_click,book_clickMonth=book_clickMonth,book_clickWeek=book_clickWeek,
             book_people=book_people,book_peopleWeek=book_peopleWeek,book_peopleMonth=book_peopleMonth,book_recomm=book_recomm,
             book_recommWeek=book_recommWeek,book_recommMonth=book_recommMonth,book_comment=book_comment)
