@@ -77,7 +77,7 @@ COOKIES_ENABLED = False
 DEFAULT_REQUEST_HEADERS = {
   'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
   'Accept-Language': 'zh-CN,zh;q=0.8,en-US;q=0.5,en;q=0.3',
-  'Accept-Encoding':'gzip, deflate, sdch',
+  'Accept-Encoding':'gzip, deflate',
   'Connection':'keep-alive',
   'Cache-Control':'no-cache',
   'Pragma':'no-cache',
@@ -134,9 +134,10 @@ AUTOTHROTTLE_MAX_DELAY = 60
 #HTTPCACHE_DIR = 'httpcache'
 #HTTPCACHE_IGNORE_HTTP_CODES = []
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
-SCHEDULER = 'yunqibook.scrapy_redis.scheduler.Scheduler'
-SCHEDULER_PERSIST = True 
-DUPEFILTER_CLASS = "yunqibook.scrapy_redis.dupefilter.RFPDupeFilter"
-REDIS_HOST = '127.0.0.1'
-REDIS_PORT = '6379'
+
+#SCHEDULER = 'yunqibook.scrapy_redis.scheduler.Scheduler'
+#SCHEDULER_PERSIST = True 
+#DUPEFILTER_CLASS = "yunqibook.scrapy_redis.dupefilter.RFPDupeFilter"
+#REDIS_HOST = '127.0.0.1'
+#REDIS_PORT = '6379'
 
