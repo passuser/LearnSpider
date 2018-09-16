@@ -20,14 +20,14 @@ class save(object):
     def img_save(self,img,filepath):
         if filepath:
             filepath = self.ospath + '/' + filepath 
-            if os.path.exists(self.ospath+'/'+filepath):
-                with open(filepath+'%s'%time.localtime()+'\.jpg','wb') as f:
+            if os.path.exists(filepath):
+                with open(filepath+'/'+'%s'%int(time.time())+'.jpg','wb') as f:
                     f.write(img)
                     self.i = self.i + 1
                     print('已爬取%d张图片'%self.i)
             else :
                 os.mkdir(filepath)
-                with open(filepath+'%s'%time.localtime()+'\.jpg','wb') as f:
+                with open(filepath+'/'+'%s'%int(time.time())+'.jpg','wb') as f:
                     f.write(img)
                     self.i = self.i + 1
                     print('已爬取%d张图片'%self.i)

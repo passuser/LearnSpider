@@ -18,13 +18,13 @@ class parse(object):
         group = {}
         groups = []
         for data in datas:
-            group['title'],group['source'],group['img_set'] = data['title'],data['source'],'https://www.toutiao.com' + data['open_url']
+            group['title'],group['source'],group['img_set'] = data['title'],data['source'],data['article_url']
             groups.append(group)
         return groups 
 
     def html_parse(self,html):
         js_patern = re.compile('JSON\.parse\(\"(.*)\"\),')
-        js = re.search(js_patern,html.text).group(1)
+        js = re.search(js_patern,html).group(1)
         js = js.replace('\\','')
         url_patern = re.compile(r'"uri":"(\S+?)"')
         urls = re.findall(url_patern,js)

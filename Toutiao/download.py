@@ -21,7 +21,7 @@ class download(object):
 
     def img_down(self,img_url):
         if img_url:
-            img = requests.get(img_url,allow_redirect=False)
+            img = requests.get(img_url,allow_redirects=False)
             if img.status_code == 200:
                 return img 
 
