@@ -13,7 +13,7 @@ class save(object):
         self.i = 0
         self.ospath = input('输入储存目录绝对路径：')
         if os.path.exists(self.ospath):
-            os.chdir(self.ospath)
+            pass
         else:
             print('该路径不存在或路径名错误！')
 

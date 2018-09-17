@@ -7,8 +7,7 @@
 '''
 解析模块：解析json数据、从网页中获取json
 '''
-import json,re
-from lxml import etree
+import re
 class parse(object):
     def __init__(self):
         pass 
@@ -41,5 +40,10 @@ class parse(object):
         '''
         相关推荐
         '''
-        pass 
-
+        recomm_p = re.compile(r'iblingList:\s(\S+),')
+        title_p = re.compile(r'"title":"(\S+?)"')
+        urls_p = re.compile(r'"source_url":"(\S+?)"')
+        recomm = re.search(recomm_p,html).group(1)
+        titles = re.findall(title_p,recomm)
+        urls = re.findall(urls_p,recomm)
+        return list(zip(titles,urls))
