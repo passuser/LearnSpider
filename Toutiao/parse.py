@@ -15,12 +15,18 @@ class parse(object):
 
     def json_parse(self,html):
         datas = html.json()['data']
-        group = {}
-        groups = []
-        for data in datas:
-            group['title'],group['source'],group['img_set'] = data['title'],data['source'],data['article_url']
-            groups.append(group)
-        return groups 
+        '''
+        l,item = [],{}
+        for datae in datas:
+            item['title'] = datae['title']
+            item['img_set'] = datae['article_url']
+            l.append(item)
+        return l
+    使用这段代码时，会重复某个数据
+        '''
+        titles = [item['title'] for item in datas]
+        img_set = [item['article_url'] for item in datas] 
+        return list(zip(titles,img_set))
 
     def html_parse(self,html):
         js_patern = re.compile('JSON\.parse\(\"(.*)\"\),')

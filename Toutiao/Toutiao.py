@@ -20,14 +20,17 @@ class spider(object):
 if __name__ == '__main__':
     s = spider()
     max_set,offset = 140,0
-    while offset < 20:
+    while offset < max_set:
         json_data = s.dl.html_down(u'https://www.toutiao.com/search_content/?offset=%s&format=json&keyword=街拍&autoload=true&count=20&cur_tab=3&from=gallery'%offset)
         offset = offset + 20
-        g_list = s.parse.json_parse(json_data)
-        for g in g_list:
-            r = s.dl.html_down(g['img_set'])
-            img_urls = s.parse.html_parse(r.text)
-            for img_url in img_urls:
-                img = s.dl.img_down(img_url)
-                s.save.img_save(img.content,g['title'])
+        try:
+            g_list = s.parse.json_parse(json_data)
+            for g in g_list:
+                r = s.dl.html_down(g[1])
+                img_urls = s.parse.html_parse(r.text)
+                for img_url in img_urls:
+                    img = s.dl.img_down(img_url)
+                    s.save.img_save(img.content,g[0])
+        except Exception as e:
+            print('出现错误：%s'%e)
     print('------------------------------------结束--------------------------------------')
