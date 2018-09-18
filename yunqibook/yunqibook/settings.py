@@ -140,4 +140,5 @@ SCHEDULER_PERSIST = True
 DUPEFILTER_CLASS = "yunqibook.scrapy_redis.dupefilter.RFPDupeFilter"
 REDIS_HOST = '127.0.0.1'
 REDIS_PORT = '6379'
+#ip proxies set 
 

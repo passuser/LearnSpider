@@ -4,6 +4,8 @@
 <br>这是一个爬虫练习作品。使用requests,BeautifulSoup4,scrapy,mongodb来写爬虫。</br>
 ### [BiqugeSpider](https://github.com/passuser/LearnSpider/tree/master/BiqugeSpider)
 <br>使用scrapy来爬取笔趣阁小说，使用mongodb存储提取到相关数据。</br>
+### [Toutiao](https://github.com/passuser/LearnSpider/tree/master/Toutiao)
+<br>爬取今日头条街拍图，分析AJAX参数获取JSON数据</br>
 ### [baike](https://github.com/passuser/LearnSpider/tree/master/baike)
 <br>使用multiprocessing来实现一个简单的分布式爬虫。获取百度百科词条，并保存成html文件</br>
 ### [rent_house](https://github.com/passuser/LearnSpider/tree/master/rent_house)
