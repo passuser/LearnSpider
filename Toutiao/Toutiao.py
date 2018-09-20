@@ -12,6 +12,7 @@ from parse import parse
 from download import download 
 from save import save 
 import pickle,os 
+import threading 
 class spider(object):
     def __init__(self):
         self.parse = parse()
@@ -21,7 +22,7 @@ class spider(object):
         self.old_group = self.load_set('old.txt') if os.path.exists('old.txt') else set()
         self.new_group = self.load_set('new.txt') if os.path.exists('new.txt') else set()
     
-    def group_dl(self,group_list):
+    def group_dl(self,g_list):
         for g in g_list:
             if g not in s.old_group:
                 response = s.dl.html_down(g[1])
@@ -45,16 +46,11 @@ class spider(object):
             return pickle.load(f)
             print('加载进度文件成功！')
 
-
-if __name__ == '__main__':
-    s = spider()
-    offset = 0
-    max_set = int(input('请输入下载图片张数：'))
-    try:
+    def main_run(self,arg):
+        max_set,offset = arg[0],arg[1]
+        json_data = s.dl.html_down(u'https://www.toutiao.com/search_content/?offset=%s&format=json&keyword=街拍&autoload=true&count=20&cur_tab=3&from=gallery'%offset)
         while s.save.i < max_set:
-            if offset <= 140:
-                json_data = s.dl.html_down(u'https://www.toutiao.com/search_content/?offset=%s&format=json&keyword=街拍&autoload=true&count=20&cur_tab=3&from=gallery'%offset)
-                offset = offset + 20
+            if json_data:
                 g_list = s.parse.json_parse(json_data)
                 reponse = s.group_dl(g_list)
                 for r,title in reponse:
@@ -64,19 +60,37 @@ if __name__ == '__main__':
                             s.new_group.add(ren)
                     img_urls = s.parse.html_parse(r.text)
                     s.imgset_dl(img_urls,title)
-            else:
-                k = s.new_group.pop()
-                if k not in s.old_group:
-                    r = s.dl.html_down(k[1])
-                    s.old_group.add(k)
-                    img_urls = s.parse.html_parse(r.text)
-                    s.imgset_dl(img_urls,k[0])
+                json_data = None
+            k = s.new_group.pop()
+            if k not in s.old_group:
+                r = s.dl.html_down(k[1])
+                s.old_group.add(k)
+
+                re_list = s.parse.recom_parse(r.text)
+                for ren in re_list:
+                    if ren not in s.old_group:
+                        s.new_group.add(ren)
+                img_urls = s.parse.html_parse(r.text)
+                s.imgset_dl(img_urls,k[0])
+
+    def process_run(self,arg):
+        t = threading.Thread(target=self.main_run,args=(arg,))
+        t.start()
+        t.join()
+
+
+#   s.save_set('old.txt',s.old_group)
+#   s.save_set('new.txt',s.new_group)
+
+if __name__ == '__main__':
+    s = spider()
+    offset = 0
+    max_set = int(input('请输入下载图片张数：'))
+    try:
+        list(map(s.process_run,[(max_set,offset+n*20) for n in range(8)]))
 
     except Exception as e:
         print('出现错误：%s\n开始保存进度文件'%e)
         s.save_set('old.txt',s.old_group)
         s.save_set('new.txt',s.new_group)
-
-    s.save_set('old.txt',s.old_group)
-    s.save_set('new.txt',s.new_group)
     print('------------------------------------结束--------------------------------------')
