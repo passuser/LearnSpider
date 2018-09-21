@@ -23,27 +23,28 @@ class parse(object):
         return l
     使用这段代码时，会重复某个数据
         '''
-        titles = [item['title'] for item in datas]
         img_set = [item['article_url'] for item in datas] 
-        return list(zip(titles,img_set))
+        return img_set
 
     def html_parse(self,html):
-        js_patern = re.compile('JSON\.parse\(\"(.*)\"\),')
+        '''
+        详细页面负责解析标题、图片下载链接、相关推荐
+        '''
+        js_patern = re.compile('JSON\.parse\(\"(.*)\"\),')   #获取本页的图片链接
         js = re.search(js_patern,html).group(1)
         js = js.replace('\\','')
-        url_patern = re.compile(r'"uri":"(\S+?)"')
-        urls = re.findall(url_patern,js)
-        urls = ['http://pb3.pstatp.com/'+url for url in urls]
-        return urls 
 
-    def recom_parse(self,html):
-        '''
-        相关推荐
-        '''
-        recomm_p = re.compile(r'iblingList:\s(\S+),')
-        title_p = re.compile(r'"title":"(\S+?)"')
-        urls_p = re.compile(r'"source_url":"(\S+?)"')
-        recomm = re.search(recomm_p,html).group(1)
-        titles = re.findall(title_p,recomm)
-        urls = re.findall(urls_p,recomm)
-        return list(zip(titles,urls))
+        img_url_patern = re.compile(r'"uri":"(\S+?)"')
+        title_p = re.compile(r'(?<=<(title)>)\S*(?=</\1)')
+        recommend_p = re.compile(r'iblingList:\s(\S+),')
+        recommend_urls_p = re.compile(r'"source_url":"(\S+?)"') #正则表达式
+
+#        titles_p = re.compile(r'"title":"(\S+?)"')
+
+        recomm = re.search(recommend_p,html).group(1)
+        title = re.search(title_p,html).group()
+        urls = re.findall(img_url_patern,js)
+        img_urls = ['http://pb3.pstatp.com/'+url for url in urls] #图集的链接
+        recommend_urls = re.findall(recommend_urls_p,recomm)
+        return title,img_urls,recommend_urls 
+
