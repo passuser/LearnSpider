@@ -56,12 +56,9 @@ class spider(object):
                     g_list = self.parse.json_parse(json_data)
                     reponse = self.group_dl(g_list)
                     for r in reponse:
-                        if r.text:
-                            print(r.text)
+                        if r:
                             title,img_urls,remmend_urls = self.parse.html_parse(r.text)
-                            for ren in remmend_urls:
-                                if ren not in self.old_group:
-                                    self.new_group.add(ren)
+                            [self.new_group.add(ren) for ren in remmend_urls if ren not in self.old_group]
                             image_list = self.imgset_dl(img_urls)
                             for img in image_list:
                                 if self.save.i < self.max_set:
@@ -77,10 +74,8 @@ class spider(object):
                         r = self.dl.html_down(k)
                         self.old_group.add(k)
                         if r:
-                            title,img_urls,re_list = self.parse.html_parse(r.text)
-                            for ren in re_list:
-                                if ren not in self.old_group:
-                                    self.new_group.add(ren)
+                            title,img_urls,remmend_urls = self.parse.html_parse(r.text)
+                            [self.new_group.add(ren) for ren in remmend_urls if ren not in self.old_group]
                             image_list = self.imgset_dl(img_urls)
                             for img in image_list:
                                 if self.save.i <= self.max_set:

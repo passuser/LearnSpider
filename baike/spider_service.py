@@ -35,7 +35,7 @@ class spider_manage(object):
                 new_url=self.manage.get_new_url()
                 url_qe.put(new_url)
                 print('正爬取第%d个链接,地址为%s'%(self.manage.old_urls_size(),new_url))
-                if self.manage.old_urls_size() > 3000:
+                if self.manage.old_urls_size() > 300000:
                     url_qe.put('stop')
                     print('爬取结束，各节点开始停止工作！')
                     ul.save_progress('new_urls.txt',self.manage.new_urls)

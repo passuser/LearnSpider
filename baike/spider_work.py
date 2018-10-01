@@ -20,7 +20,7 @@ class spider_work(object):
     def __init__(self):
         BaseManager.register('get_task_queue')
         BaseManager.register('get_result_queue')
-        server_addr='127.0.0.1'
+        server_addr=input('服务器地址，本机请输入127.0.0.1')
         print('Connecting to server %s...'%server_addr)
         self.m=BaseManager(address=(server_addr,8050),authkey=b'baidubaike')
         self.m.connect()
